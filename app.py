@@ -16,14 +16,14 @@ SCOPES_V2 = ["view_group", "send_notification", "admin_room", "view_room"]
 def get_scopes(context):
     return SCOPES_V2 if context.get("hipchat_server", False) else SCOPES_V1
 
-FROM_NAME = "Alias"
+FROM_NAME = "HipAlias"
 PARTICIPANTS_CACHE_KEY = "hipchat-participants:{group_id}:{room_id}"
 
 log = logging.getLogger(__name__)
-app, addon = create_addon_app(addon_key="hc-alias",
-                       addon_name="HC Alias",
-                       vendor_name="Atlassian",
-                       vendor_url="https://atlassian.com",
+app, addon = create_addon_app(addon_key="HipAlias",
+                       addon_name="HipAlias",
+                       vendor_name="Oxalide",
+                       vendor_url="http://oxalide.com",
                        from_name=FROM_NAME,
                        scopes=get_scopes)
 
@@ -37,7 +37,7 @@ def init(app):
     @asyncio.coroutine
     def send_welcome(event):
         client = event['client']
-        asyncio.async(client.room_client.send_notification(text="HC Alias was added to this room"))
+        asyncio.async(client.room_client.send_notification(text="HipAlias was added to this room"))
 
     @asyncio.coroutine
     def register_existing_alias(client, alias):
@@ -179,7 +179,7 @@ def mention(request):
     if existing:
         mentions = existing['mentions']
 
-        txt = "said: {original} /cc {mentions}".format(
+        txt = " {{mentions}} <br /> <strong> {{ original }} </strong> ".format(
             original=body['item']["message"]["message"],
             mentions=" ".join(mentions))
         from_mention = body['item']['message']['from']['mention_name']
